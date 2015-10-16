@@ -8,7 +8,7 @@ import views.html.*;
 public class Application extends Controller {
 
     public Result index() {
-        return ok(index.render("Los geht's."));
+        return ok(index.render("Die Applikation wurde gestartet."));
     }
 
 }
