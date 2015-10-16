@@ -1,0 +1,74 @@
+logs
+target
+/.idea
+/.idea_modules
+/.classpath
+/.project
+/.settings
+/RUNNING_PID
+
+# User-specific stuff:
+# .idea/workspace.xml
+# .idea/tasks.xml
+# .idea/dictionaries
+# .idea/shelf
+
+# Sensitive or high-churn files:
+# .idea/dataSources.ids
+# .idea/dataSources.xml
+# .idea/sqlDataSources.xml
+# .idea/dynamic.xml
+# .idea/uiDesigner.xml
+
+# Gradle:
+# .idea/gradle.xml
+# .idea/libraries
+
+# Mongo Explorer plugin:
+# .idea/mongoSettings.xml
+
+## File-based project format:
+*.ipr
+*.iws
+
+## Plugin-specific files:
+
+# IntelliJ
+/out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+*.iml
+*.lock
+*.komodoproject
+.DS_Store
+.history
+.idea
+.classpath
+.cache
+.project/
+.project
+.idea/
+.idea_modules/
+.settings/
+.target/
+RUNNING_PID
+project/boot/
+workspace/
+repository/
+monitoring/
+target/
+logs/
+.settings
+.classpath
+.project
+.cache
+bin/
+project/activator-sbt-eclipse-shim.sbt
+project/activator-sbt-idea-shim.sbt
+.sbtserver
+project/.sbtserver
+build.sbt
+project/sbt-ui.sbt
+project/play-fork-run.sbt
