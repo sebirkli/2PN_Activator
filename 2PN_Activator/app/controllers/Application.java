@@ -10,7 +10,7 @@ public class Application extends Controller {
     TpnController helloController = new TpnController(1, 1);
 
     public Result index() {
-        return ok(index.render("Nico ist cool."));
+        return ok(index.render());
     }
 
 }
