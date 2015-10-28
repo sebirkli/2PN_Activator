@@ -7,7 +7,7 @@ import views.html.*;
 
 public class Application extends Controller {
 
-    TpnController helloController = new TpnController(1, 1);
+    TpnController helloController = new TpnController(5, 2);
 
     public Result index() {
         return ok(index.render());
