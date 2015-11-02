@@ -16,7 +16,6 @@ public class Application extends Controller {
 
     public Result playGame() {
 
-
         return ok(tpn.render(controller));
     }
 
