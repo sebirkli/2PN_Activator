@@ -1,17 +1,12 @@
 @(controller:de.htwg.se.tpn.controller.TpnController)
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <t></t
-</head>
-<body>
-    <div>
-        @*for(controller.getHeight())*@
-            @*for(controller.getHeight())*@
-                @*<div>controller.tileat(i,j)</div>*@
-            @*newline*@
-    </div>
-</body>
-</html>
+<div style="width:2000px">
+    @for(row <- 0 until controller.getSize) {
+        @for(column <- 0 until controller.getSize) {
+            <div id="tile">
+                @controller.getValue(row, column)
+            </div>
+        }
+        <br>
+    }
+</div>
