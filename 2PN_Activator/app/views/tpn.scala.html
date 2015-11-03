@@ -3,12 +3,13 @@
 @main("2PN - game") {
 <div>
     @for(row <- 0 until controller.getSize) {
+    <div class="row">
         @for(column <- 0 until controller.getSize) {
             <div class="tile">
                 @controller.getValue(row, column)
             </div>
         }
-        <br>
     }
+    </div>
 </div>
 }
