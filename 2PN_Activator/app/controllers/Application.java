@@ -20,7 +20,17 @@ public class Application extends Controller {
     public Result index() {
         return ok(index.render());
     }
-
+    
+    public Result startGUI() {
+        TwoPN.getInstance().startGUI();
+        return playGame();
+    }
+    
+    public Result sendCommand(String command) {
+        controller.processInput(command);
+        return playGame();
+    }
+    
     public Result playGame() {
         return ok(tpn.render(controller));
     }

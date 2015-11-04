@@ -6,6 +6,8 @@
 GET     /                           controllers.Application.index()
 
 GET     /game                       controllers.Application.playGame()
+GET     /gui                        controllers.Application.startGUI()
+GET     /game/:command              controllers.Application.sendCommand(command:String)
 
 
 # Map static resources from the /public folder to the /assets URL path
