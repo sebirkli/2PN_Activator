@@ -10,20 +10,41 @@ body {
     }
 }
 
-
-.introduction {
-
-}
-
 .tile {
     background-color:green;
-    float:left;
-    padding:25px;
+    //padding:25px;
     border-style:solid;
     border-width:5px;
     border-color:red;
 }
 
 .row {
+     //width:300px;
+ }
+
+.container
+{
+    background-color: #00d4b4;
     width:300px;
+    height: 300px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.gameField {
+    &:extend(.container);
+}
+
+.square {
+    float:left;
+    position: relative;
+    height: 20%;
+    width: 20%;
+    padding-bottom : 20%; /* = width for a 1:1 aspect ratio */
+    margin:1.75%;
+    background-position:center center;
+    background-repeat:no-repeat;
+    background-size:cover; /* you change this to "contain" if you don't want the images to be cropped */
 }

@@ -1,15 +1,13 @@
-@(controller:de.htwg.se.tpn.controller.TpnControllerInterface)
+@(controller: de.htwg.se.tpn.controller.TpnControllerInterface)
 
 @main("2PN - game") {
-<div>
-    @for(row <- 0 until controller.getSize) {
-    <div class="row">
-        @for(column <- 0 until controller.getSize) {
-            <div class="tile">
-                @controller.getValue(row, column)
-            </div>
-        }
-    }
+    <div class="grid container">
+        @for(row <- 0 until controller.getSize) {
+                @for(column <- 0 until controller.getSize) {
+                    <div class="tile square">
+                    @controller.getValue(row, column)
+                    </div>
+                }
+            }
     </div>
-</div>
 }

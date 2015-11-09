@@ -23,6 +23,8 @@
 *.iws
 
 ## Plugin-specific files:
+2PN_Activator/project/play-fork-run.sbt
+2PN_Activator/project/sbt-ui.sbt
 
 # IntelliJ
 /out/
