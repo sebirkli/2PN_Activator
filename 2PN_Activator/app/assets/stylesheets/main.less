@@ -11,11 +11,9 @@ body {
 }
 
 .tile {
-    background-color:green;
-    //padding:25px;
+    background-color:snow;
     border-style:solid;
-    border-width:5px;
-    border-color:red;
+    border-width:2px;
 }
 
 .row {
@@ -24,13 +22,24 @@ body {
 
 .container
 {
-    background-color: #00d4b4;
     width:300px;
     height: 300px;
-    padding-right: 15px;
-    padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
+
+    //place container in mid of view
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+
+    //align text in middle of container
+    text-align: center;
+
+    display: block;
+    //vertical-align: middle;
+    horiz-align: middle;
+
 }
 
 .gameField {
@@ -42,9 +51,10 @@ body {
     position: relative;
     height: 20%;
     width: 20%;
-    padding-bottom : 20%; /* = width for a 1:1 aspect ratio */
+    //padding-bottom : 20%; /* = width for a 1:1 aspect ratio */
     margin:1.75%;
     background-position:center center;
     background-repeat:no-repeat;
     background-size:cover; /* you change this to "contain" if you don't want the images to be cropped */
+
 }
