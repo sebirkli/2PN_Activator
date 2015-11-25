@@ -16,15 +16,16 @@
 
         <script src="jquery.js"></script>
 
-@*        <script>
+        <script>
             window.onload = function() {
-            alert( "welcome" );
+                //alert( "welcome");
+                console.log("hello world");
             };
-        </script>*@
+        </script>
 
         <script>
             $( function() {
-                $("#action-1").click(function() {
+                $("#newGame").click(function() {
                     /*alert( "Handler for .click() called." );*/
                 });
             });
@@ -44,8 +45,8 @@
                 </div>
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
-                        <li><a href="#">Home</a></li>
-                        <li><a id="action-1" href="/game/n">New Game</a></li>
+                        <li><a href="/">Home</a></li>
+                        <li><a id="newGame" href="/game/n">New Game</a></li>
                         <li><a href="#">Page 2</a></li>
                         <li><a href="#">Page 3</a></li>
                     </ul>
