@@ -17,6 +17,22 @@
         <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
         <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 
+        <script src="jquery.js"></script>
+
+@*        <script>
+            window.onload = function() {
+            alert( "welcome" );
+            };
+        </script>*@
+
+        <script>
+            $( function() {
+                $("#action-1").click(function() {
+                    /*alert( "Handler for .click() called." );*/
+                });
+            });
+        </script>
+
     </head>
     <body>
         <nav class="navbar navbar-inverse">
@@ -31,8 +47,8 @@
                 </div>
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#">Page 1</a></li>
+                        <li><a href="#">Home</a></li>
+                        <li><a id="action-1" href="/game/n">New Game</a></li>
                         <li><a href="#">Page 2</a></li>
                         <li><a href="#">Page 3</a></li>
                     </ul>
