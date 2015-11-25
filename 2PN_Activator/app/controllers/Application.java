@@ -22,7 +22,9 @@ public class Application extends Controller {
     }
     
     public Result sendCommand(String command) {
+
         controller.processInput(command);
+
         return playGame();
     }
     
