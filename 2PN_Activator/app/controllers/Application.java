@@ -5,6 +5,12 @@ import play.mvc.*;
 import de.htwg.se.tpn.TwoPN;
 import de.htwg.se.tpn.controller.TpnController;
 import de.htwg.se.tpn.controller.TpnControllerInterface;
+import play.libs.Json;
+import play.mvc.Controller;
+import play.mvc.Result;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import views.html.*;
 
@@ -31,32 +37,27 @@ public class Application extends Controller {
         return ok(tpn.render(controller));
     }
 
-    public static Result jsonCommand(String command) {
-//        Sudoku.getInstance().getTUI().processInputLine(command);
+    public Result jsonCommand(String command) {
+        controller.processInput(command);
         return json();
     }
 
-    public static Result json() {
-/*        IGrid grid = controller.getGrid();
-        int x = grid.getCellsPerEdge();
-        Map<String, Object> obj[][] = new HashMap[x][x];
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < x; j++) {
-                obj[i][j] = new HashMap<String, Object>();
-                obj[i][j].put("cell", grid.getICell(i,j));
-                boolean[] candidates = new boolean[x];
-                for (int ii = 0; ii < x; ii++) {
-                    candidates[ii] = controller.isCandidate(i, j, ii + 1);
-                }
-                obj[i][j].put("candidates", candidates);
+    public Result json() {
+        int fieldSize = controller.getSize();
+        
+        Map<String, Object> grid[][] = new HashMap[fieldSize][fieldSize];
+
+        for (int i = 0; i < fieldSize; ++i) {
+            for (int j = 0; j < fieldSize; ++j) {
+                grid[i][j] = new HashMap<String, Object>();
+                grid[i][j].put("value", controller.getValue(i, j));
             }
         }
 
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("meta", controller.getGrid());
-        map.put("grid", obj);
+        map.put("filedSize", fieldSize);
+        map.put("grid", grid);
 
-        return ok(Json.stringify(Json.toJson(map)));*/
-        return null;
+        return ok(Json.stringify(Json.toJson(map)));
     }
 }
