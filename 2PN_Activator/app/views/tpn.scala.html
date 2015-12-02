@@ -6,7 +6,7 @@
     <div class="grid container">
         @for(row <- 0 until controller.getSize) {
                 @for(column <- 0 until controller.getSize) {
-                    <div class="tile square @{"tile" + controller.getValue(row, column)}">
+                    <div id="@{row.toString + column.toString}" class="tile square @{"tile" + controller.getValue(row, column)}">
                     @controller.getValue(row, column)
                     </div>
                 }

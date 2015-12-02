@@ -32,12 +32,12 @@ public class Application extends Controller {
     }
 
     public static Result jsonCommand(String command) {
-        Sudoku.getInstance().getTUI().processInputLine(command);
+//        Sudoku.getInstance().getTUI().processInputLine(command);
         return json();
     }
 
     public static Result json() {
-        IGrid grid = controller.getGrid();
+/*        IGrid grid = controller.getGrid();
         int x = grid.getCellsPerEdge();
         Map<String, Object> obj[][] = new HashMap[x][x];
         for (int i = 0; i < x; i++) {
@@ -56,6 +56,7 @@ public class Application extends Controller {
         map.put("meta", controller.getGrid());
         map.put("grid", obj);
 
-        return ok(Json.stringify(Json.toJson(map)));
+        return ok(Json.stringify(Json.toJson(map)));*/
+        return null;
     }
 }
