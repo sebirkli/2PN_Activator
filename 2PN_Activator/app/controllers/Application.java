@@ -55,7 +55,7 @@ public class Application extends Controller {
         }
 
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("filedSize", fieldSize);
+        map.put("fieldSize", fieldSize);
         map.put("grid", grid);
 
         return ok(Json.stringify(Json.toJson(map)));
