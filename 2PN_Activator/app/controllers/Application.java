@@ -8,6 +8,10 @@ import de.htwg.se.tpn.controller.TpnControllerInterface;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+import java.util.LinkedList;
+import controllers.WebsocketObserver;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,5 +63,15 @@ public class Application extends Controller {
         map.put("grid", grid);
 
         return ok(Json.stringify(Json.toJson(map)));
+    }
+    
+    private LinkedList<WebSocket.Out<JsonNode>> sockets;
+    
+    public WebSocket<JsonNode> socket() {
+        return new WebSocket<JsonNode>() {
+            public void onReady(WebSocket.In<JsonNode> in, WebSocket.Out<JsonNode> out) {
+                new WebsocketObserver(controller, out, in);
+            }
+        };
     }
 }
