@@ -1,13 +1,16 @@
 angular.module('myApp', [])
 .controller('tpnController', function($scope){
-    $scope.players = [];
+    $scope.highscores = [];
+    $scope.playerName = "";
+    $scope.limit = 5;
     $scope.addHighscore = function(highscore){
-        players.push(highscore);
+        
+        $scope.highscores.push(highscore);
     };
 });
 
 var socket = new WebSocket("ws://" + location.host + "/socket");
-
+var counter = 0;
 socket.onopen = function() {
     console.log("onopen");
 };
@@ -27,10 +30,12 @@ socket.onmessage = function(message) {
     }
     
     if(true){
-        angular.element('tpnController').scope().addHighscore({
-            name: 'put it here',
-            points: 9999
-        });
+        var ngScope = angular.element(document.querySelector('#scope')).scope();
+        ngScope.$apply(ngScope.addHighscore({
+            name: counter + 'name',
+            points: counter*100
+        }));
+        counter++;
     }
 };
 socket.onerror = function() {

@@ -8,30 +8,36 @@
     } else {
         <script type='text/javascript' src='@routes.Assets.versioned("javascript/ajax.js")'></script>
     }
-
-    <div class="grid container">
-        @for(row <- 0 until controller.getSize) {
-                @for(column <- 0 until controller.getSize) {
-                    <div id="@{row.toString + column.toString}" class="tile square @{"tile" + controller.getValue(row, column)}">
-                    @controller.getValue(row, column)
-                    </div>
-                }
-            }
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="grid game-container">
+                    @for(row <- 0 until controller.getSize) {
+                        @for(column <- 0 until controller.getSize) {
+                            <div id="@{row.toString + column.toString}" class="tile square @{"tile" + controller.getValue(row, column)}">
+                                <span class="tile-centerd-text">
+                                    @controller.getValue(row, column)        
+                                </span>
+                            </div>
+                        }
+                    }
+                </div>    
+            </div>
+            <div class="col-md-4">
+                <div ng-app="myApp" ng-controller="tpnController" id="scope">
+                    <input type="text" ng-model="playerName" class="form-control" placeholder="Search player">
+                    <table class="table table-stripped">
+                        <tr>
+                            <th>Name</th>
+                            <th>Points</th> 
+                        </tr>
+                        <tr ng-repeat="highscore in highscores | filter:{name: playerName} | orderBy:'-points' | limitTo:limit">
+                            <td>{{highscore.name}}</td>      
+                            <td>{{highscore.points}}</td>      
+                        </tr>
+                    </table>    
+                </div>
+            </div>
+        </div>
     </div>
-    
-    <div ng-app="myApp" ng-controller="tpnController" id="scope">
-        <input type="text" ng-model="player.name" class="form-control" placeholder="Search player">
-        <table class="table table-stripped">
-            <tr>
-                <th>Name</th>
-                <th>Points</th> 
-            </tr>
-            <tr ng-repeat="highscore in highscores | filter:player orderBy: '-points'  ">
-                <td>{{highscore.name}}</td>      
-                <td>{{highscore.points}}</td>      
-            </tr>
-        </table>    
-    </div>
-    
-    <button type="button" id="down_button">down</button>
 }
