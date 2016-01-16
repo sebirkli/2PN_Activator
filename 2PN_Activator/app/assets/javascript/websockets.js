@@ -1,3 +1,11 @@
+angular.module('myApp', [])
+.controller('tpnController', function($scope){
+    $scope.players = [];
+    $scope.addHighscore = function(highscore){
+        players.push(highscore);
+    };
+});
+
 var socket = new WebSocket("ws://" + location.host + "/socket");
 
 socket.onopen = function() {
@@ -18,7 +26,7 @@ socket.onmessage = function(message) {
         }
     }
     
-    if(gameover){
+    if(true){
         angular.element('tpnController').scope().addHighscore({
             name: 'put it here',
             points: 9999

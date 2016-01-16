@@ -3,8 +3,8 @@
 @main("2PN - game") {
 
     @if(script == "ws") {
+        <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular.min.js'></script>
 		<script type='text/javascript' src='@routes.Assets.versioned("javascript/websockets.js")'></script>
-		<script type='text/javascript' src='@routes.Assets.versioned("javascript/angular.js")'></script>
     } else {
         <script type='text/javascript' src='@routes.Assets.versioned("javascript/ajax.js")'></script>
     }
@@ -19,7 +19,7 @@
             }
     </div>
     
-    <div ng-app="myApp" ng-controller="tpnController">
+    <div ng-app="myApp" ng-controller="tpnController" id="scope">
         <input type="text" ng-model="player.name" class="form-control" placeholder="Search player">
         <table class="table table-stripped">
             <tr>
