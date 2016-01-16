@@ -1,12 +1,12 @@
-@(controller: de.htwg.se.tpn.controller.TpnControllerInterface)(script: String)
+@(controller: de.htwg.se.tpn.controller.TpnControllerInterface)(privateGame: String)
 
 @main("2PN - game") {
 
-    @if(script == "ws") {
+    @if(privateGame == "true") {
+        <script type='text/javascript' src='@routes.Assets.versioned("javascript/ajax.js")'></script>
+    } else {
         <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular.min.js'></script>
 		<script type='text/javascript' src='@routes.Assets.versioned("javascript/websockets.js")'></script>
-    } else {
-        <script type='text/javascript' src='@routes.Assets.versioned("javascript/ajax.js")'></script>
     }
     <div class="container">
         <div class="row">
