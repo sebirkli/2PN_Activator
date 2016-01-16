@@ -17,6 +17,13 @@ socket.onmessage = function(message) {
                 .html(resultObj.grid[i][j].value);
         }
     }
+    
+    if(gameover){
+        angular.element('tpnController').scope().addHighscore({
+            name: 'put it here',
+            points: 9999
+        });
+    }
 };
 socket.onerror = function() {
     console.log("onerror");

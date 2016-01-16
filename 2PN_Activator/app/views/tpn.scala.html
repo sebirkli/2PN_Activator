@@ -2,6 +2,7 @@
 
 @main("2PN - game") {
     <script type='text/javascript' src='@routes.Assets.versioned("javascript/websockets.js")'></script>
+    <script type='text/javascript' src='@routes.Assets.versioned("javascript/angular.js")'></script>
     
     <div class="grid container">
         @for(row <- 0 until controller.getSize) {
@@ -12,5 +13,20 @@
                 }
             }
     </div>
+    
+    <div ng-app="myApp" ng-controller="tpnController">
+        <input type="text" ng-model="player.name" class="form-control" placeholder="Search player">
+        <table class="table table-stripped">
+            <tr>
+                <th>Name</th>
+                <th>Points</th> 
+            </tr>
+            <tr ng-repeat="highscore in highscores | filter:player orderBy: '-points'  ">
+                <td>{{highscore.name}}</td>      
+                <td>{{highscore.points}}</td>      
+            </tr>
+        </table>    
+    </div>
+    
     <button type="button" id="down_button">down</button>
 }
