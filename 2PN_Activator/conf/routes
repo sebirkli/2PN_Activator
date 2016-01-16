@@ -6,7 +6,8 @@
 GET     /                           controllers.Application.index()
 
 # Playing Game
-GET     /game                       controllers.Application.playGame()
+GET     /public                     controllers.Application.publicGame()
+GET     /private                    controllers.Application.privateGame()
 GET     /gui                        controllers.Application.startGUI()
 GET     /game/:command              controllers.Application.sendCommand(command:String)
 

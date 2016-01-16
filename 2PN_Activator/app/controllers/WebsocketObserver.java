@@ -2,6 +2,7 @@ package controllers;
 
 import de.htwg.se.tpn.util.observer.IObserver;
 import de.htwg.se.tpn.controller.TpnController;
+import de.htwg.se.tpn.controller.TpnControllerInterface;
 import de.htwg.se.tpn.util.observer.Event;
 import play.libs.F;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -15,25 +16,37 @@ import play.libs.*;
 
 class WebsocketObserver implements IObserver {
 
-    WebSocket.Out<String> out;
-    WebSocket.In<String> in;
-    TpnController controller;
-    public WebsocketObserver(TpnController c, WebSocket.Out<String> o,
-                                WebSocket.In<String> i) {
+    WebSocket.Out<JsonNode> out;
+    WebSocket.In<JsonNode> in;
+    TpnControllerInterface controller;
+    public WebsocketObserver(TpnControllerInterface c, WebSocket.Out<JsonNode> o,
+                                WebSocket.In<JsonNode> i) {
         out = o;
         in = i;
         controller = c;
         c.addObserver(this);
         
-        in.onMessage(new F.Callback<String>() {
-            public void invoke(String event) {
+        in.onMessage(new F.Callback<JsonNode>() {
+            public void invoke(JsonNode event) {
                 controller.processInput(event.get("d").asText());
             }
         });
     }
  
+    boolean end = false;
+ 
     @Override
-    public void update(Event event) {
+    public void update(Event e) {
+        if (e instanceof TpnControllerInterface.NewFieldEvent) {
+			updateValues();
+		} else if (e instanceof TpnControllerInterface.GameOverEvent && !end) {
+			end = true;
+		} else if (e instanceof TpnControllerInterface.NewGameEvent) {
+			end = false;
+		}
+    } 
+    
+    private void updateValues() {
         JsonNodeFactory nodeFactory = JsonNodeFactory.instance ;
         ObjectNode node = nodeFactory.objectNode();
         
@@ -54,5 +67,5 @@ class WebsocketObserver implements IObserver {
         node.put("grid", grid);
         
         out.write(node);
-    }    
+    }
 }
