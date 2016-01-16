@@ -1,9 +1,14 @@
-@(controller: de.htwg.se.tpn.controller.TpnControllerInterface)
+@(controller: de.htwg.se.tpn.controller.TpnControllerInterface)(script: String)
 
 @main("2PN - game") {
-    <script type='text/javascript' src='@routes.Assets.versioned("javascript/websockets.js")'></script>
-    <script type='text/javascript' src='@routes.Assets.versioned("javascript/angular.js")'></script>
-    
+
+    @if(script == "ws") {
+		<script type='text/javascript' src='@routes.Assets.versioned("javascript/websockets.js")'></script>
+		<script type='text/javascript' src='@routes.Assets.versioned("javascript/angular.js")'></script>
+    } else {
+        <script type='text/javascript' src='@routes.Assets.versioned("javascript/ajax.js")'></script>
+    }
+
     <div class="grid container">
         @for(row <- 0 until controller.getSize) {
                 @for(column <- 0 until controller.getSize) {

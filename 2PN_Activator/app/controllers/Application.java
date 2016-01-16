@@ -20,6 +20,7 @@ import views.html.*;
 
 public class Application extends Controller {
 
+    HashMap<String, TpnControllerInterface> uuidToController = new HashMap<>();
     static TpnControllerInterface controller = TwoPN.getInstance().getController();
 
     public Result index() {
@@ -28,17 +29,50 @@ public class Application extends Controller {
     
     public Result startGUI() {
         TwoPN.getInstance().startGUI();
-        return playGame();
+        return showGame();
     }
     
     public Result sendCommand(String command) {
         System.out.println(command);
         controller.processInput(command);
-        return playGame();
+        return showGame();
     }
     
-    public Result playGame() {
-        return ok(tpn.render(controller));
+    public Result publicGame() {
+        controller = TwoPN.getInstance().getController();
+        
+        session("script", "ws");
+        return showGame();
+    }
+    
+    public Result privateGame() {
+        session("script", "ajax");
+        session("private", "true");
+        return showGame();
+    }
+    
+    private Result showGame() {
+        String script = session("script");
+        if (script == null) {
+            script = "ws";
+        }
+        
+        TpnControllerInterface c = controller;
+        String isPrivate = session("private");
+        if (isPrivate != null && isPrivate.equals("true")) {
+            String uuid = session("uuid");
+            if(uuid == null) {
+                uuid = java.util.UUID.randomUUID().toString();
+                session("uuid", uuid);
+            }
+            if (!uuidToController.containsKey(uuid)) {
+                uuidToController.put(uuid, new TpnController(4, 2));
+            }
+        
+            c = uuidToController.get(uuid);
+        }
+        
+        return ok(tpn.render(c, script));
     }
 
     public Result jsonCommand(String command) {
@@ -47,14 +81,19 @@ public class Application extends Controller {
     }
 
     public Result json() {
-        int fieldSize = controller.getSize();
+        TpnControllerInterface c = controller;
+        String uuid = session("uuid");
+        if(uuid == null) {
+            c = uuidToController.get(uuid);
+        }
+        int fieldSize = c.getSize();
         
         Map<String, Object> grid[][] = new HashMap[fieldSize][fieldSize];
 
         for (int i = 0; i < fieldSize; ++i) {
             for (int j = 0; j < fieldSize; ++j) {
                 grid[i][j] = new HashMap<String, Object>();
-                grid[i][j].put("value", controller.getValue(i, j));
+                grid[i][j].put("value", c.getValue(i, j));
             }
         }
 
