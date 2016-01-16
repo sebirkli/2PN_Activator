@@ -27,7 +27,6 @@ $(function() {
         
         $.ajax({url: "/json/" + direction, success: function(result){
             resultObj = JSON.parse(result);
-            console.log(resultObj);
             var fieldSize = resultObj.fieldSize;
             for (i = 0; i < fieldSize; ++i) {
                 for (j = 0; j < fieldSize; ++j) {

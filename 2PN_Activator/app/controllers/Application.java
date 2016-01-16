@@ -20,7 +20,7 @@ import views.html.*;
 
 public class Application extends Controller {
 
-    HashMap<String, TpnControllerInterface> uuidToController = new HashMap<>();
+    static HashMap<String, TpnControllerInterface> uuidToController = new HashMap<>();
     static TpnControllerInterface controller = TwoPN.getInstance().getController();
 
     public Result index() {
@@ -60,16 +60,7 @@ public class Application extends Controller {
         TpnControllerInterface c = controller;
         String isPrivate = session("private");
         if (isPrivate != null && isPrivate.equals("true")) {
-            String uuid = session("uuid");
-            if(uuid == null) {
-                uuid = java.util.UUID.randomUUID().toString();
-                session("uuid", uuid);
-            }
-            if (!uuidToController.containsKey(uuid)) {
-                uuidToController.put(uuid, new TpnController(4, 2));
-            }
-        
-            c = uuidToController.get(uuid);
+
         }
         
         return ok(tpn.render(c, script));
@@ -83,9 +74,19 @@ public class Application extends Controller {
     public Result json() {
         TpnControllerInterface c = controller;
         String uuid = session("uuid");
+        
+        System.out.printf("json request, uuid: %s\n", uuid);
+        
         if(uuid == null) {
-            c = uuidToController.get(uuid);
+            uuid = java.util.UUID.randomUUID().toString();
+            session("uuid", uuid);
         }
+        if (!uuidToController.containsKey(uuid)) {
+            System.out.printf("newController, mapsize: %d\n", uuidToController.size());
+            uuidToController.put(uuid, new TpnController(4, 2));
+        }
+    
+        c = uuidToController.get(uuid);
         int fieldSize = c.getSize();
         
         Map<String, Object> grid[][] = new HashMap[fieldSize][fieldSize];
