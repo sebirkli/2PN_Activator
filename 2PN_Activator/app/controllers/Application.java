@@ -20,7 +20,7 @@ import views.html.*;
 
 public class Application extends Controller {
 
-    HashMap<String, TpnControllerInterface> uuidToController = new HashMap<>();
+    static HashMap<String, TpnControllerInterface> uuidToController = new HashMap<>();
     static TpnControllerInterface controller = TwoPN.getInstance().getController();
 
     public Result index() {
@@ -34,58 +34,65 @@ public class Application extends Controller {
     
     public Result sendCommand(String command) {
         System.out.println(command);
-        controller.processInput(command);
+        curController().processInput(command);
         return showGame();
     }
     
     public Result publicGame() {
         controller = TwoPN.getInstance().getController();
-        
-        session("script", "ws");
+        session("private", "false");
         return showGame();
     }
     
     public Result privateGame() {
-        session("script", "ajax");
         session("private", "true");
         return showGame();
     }
     
     private Result showGame() {
-        String script = session("script");
-        if (script == null) {
-            script = "ws";
-        }
+        TpnControllerInterface c = curController();
         
-        TpnControllerInterface c = controller;
         String isPrivate = session("private");
-        if (isPrivate != null && isPrivate.equals("true")) {
-            String uuid = session("uuid");
-            if(uuid == null) {
-                uuid = java.util.UUID.randomUUID().toString();
-                session("uuid", uuid);
-            }
-            if (!uuidToController.containsKey(uuid)) {
-                uuidToController.put(uuid, new TpnController(4, 2));
-            }
-        
-            c = uuidToController.get(uuid);
+        if (isPrivate == null) {
+            isPrivate = "false";
         }
         
-        return ok(tpn.render(c, script));
+        return ok(tpn.render(c, isPrivate));
     }
 
     public Result jsonCommand(String command) {
-        controller.processInput(command);
+        session("private", "true");
+        curController().processInput(command);
         return json();
+    }
+    
+    private TpnControllerInterface curController() {
+        TpnControllerInterface c = controller;
+        
+        String isPrivate = session("private");
+        if (isPrivate != null && isPrivate.equals("true")) {
+            String uuid = curUUID();
+            if (!uuidToController.containsKey(uuid)) {
+                uuidToController.put(uuid, new TpnController(4, 2));
+            }
+            c = uuidToController.get(uuid);
+        }
+    
+        return c;
+    }
+    
+    private String curUUID() {
+        String uuid = session("uuid");
+        if(uuid == null) {
+            uuid = java.util.UUID.randomUUID().toString();
+            session("uuid", uuid);
+        }
+        return uuid;
     }
 
     public Result json() {
-        TpnControllerInterface c = controller;
-        String uuid = session("uuid");
-        if(uuid == null) {
-            c = uuidToController.get(uuid);
-        }
+        TpnControllerInterface c = curController();
+        
         int fieldSize = c.getSize();
         
         Map<String, Object> grid[][] = new HashMap[fieldSize][fieldSize];
@@ -96,7 +103,7 @@ public class Application extends Controller {
                 grid[i][j].put("value", c.getValue(i, j));
             }
         }
-
+        
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("fieldSize", fieldSize);
         map.put("grid", grid);

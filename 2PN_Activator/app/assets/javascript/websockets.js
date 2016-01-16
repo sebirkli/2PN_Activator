@@ -1,5 +1,16 @@
-var socket = new WebSocket("ws://" + location.host + "/socket");
+angular.module('myApp', [])
+.controller('tpnController', function($scope){
+    $scope.highscores = [];
+    $scope.playerName = "";
+    $scope.limit = 5;
+    $scope.addHighscore = function(highscore){
+        
+        $scope.highscores.push(highscore);
+    };
+});
 
+var socket = new WebSocket("ws://" + location.host + "/socket");
+var counter = 0;
 socket.onopen = function() {
     console.log("onopen");
 };
@@ -16,6 +27,15 @@ socket.onmessage = function(message) {
             $(tileID)
                 .html(resultObj.grid[i][j].value);
         }
+    }
+    
+    if(true){
+        var ngScope = angular.element(document.querySelector('#scope')).scope();
+        ngScope.$apply(ngScope.addHighscore({
+            name: counter + 'name',
+            points: counter*100
+        }));
+        counter++;
     }
 };
 socket.onerror = function() {
