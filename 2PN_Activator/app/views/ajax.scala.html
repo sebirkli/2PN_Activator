@@ -1,0 +1,8 @@
+@(controller: de.htwg.se.tpn.controller.TpnControllerInterface)
+
+@main("2PN - game") {
+    <script type='text/javascript' src='@routes.Assets.versioned("javascript/ajax.js")'></script>
+    <div class="container">
+            @gamefield(controller)
+    </div>
+}

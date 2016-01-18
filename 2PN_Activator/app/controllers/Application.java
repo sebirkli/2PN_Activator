@@ -32,10 +32,8 @@ public class Application extends Controller {
         return showGame();
     }
     
-    public Result sendCommand(String command) {
-        System.out.println(command);
-        curController().processInput(command);
-        return showGame();
+    public Result ajaxGame() {
+        return ok(ajax.render(controller));
     }
     
     public Result publicGame() {
@@ -52,12 +50,7 @@ public class Application extends Controller {
     private Result showGame() {
         TpnControllerInterface c = curController();
         
-        String isPrivate = session("private");
-        if (isPrivate == null) {
-            isPrivate = "false";
-        }
-        
-        return ok(tpn.render(c, isPrivate));
+        return ok(tpn.render(c));
     }
 
     public Result jsonCommand(String command) {
@@ -66,7 +59,7 @@ public class Application extends Controller {
         return json();
     }
     
-    private TpnControllerInterface curController() {
+    public TpnControllerInterface curController() {
         TpnControllerInterface c = controller;
         
         String isPrivate = session("private");
@@ -114,9 +107,10 @@ public class Application extends Controller {
     private LinkedList<WebSocket.Out<JsonNode>> sockets;
     
     public WebSocket<JsonNode> socket() {
+        TpnControllerInterface c = curController();
         return new WebSocket<JsonNode>() {
             public void onReady(WebSocket.In<JsonNode> in, WebSocket.Out<JsonNode> out) {
-                new WebsocketObserver(controller, out, in);
+                new WebsocketObserver(c, out, in);
             }
         };
     }

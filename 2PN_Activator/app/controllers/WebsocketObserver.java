@@ -24,11 +24,19 @@ class WebsocketObserver implements IObserver {
         out = o;
         in = i;
         controller = c;
-        c.addObserver(this);
+        controller.addObserver(this);
         
         in.onMessage(new F.Callback<JsonNode>() {
             public void invoke(JsonNode event) {
-                controller.processInput(event.get("d").asText());
+                JsonNode eventType = event.get("eventType");
+                if (eventType == null) {
+                    return;
+                }
+                if (eventType.asText().equals("newGame")) {
+                    controller.gameInit(4,3);
+                } else if (eventType.asText().equals("command")) {
+                    controller.processInput(event.get("d").asText());
+                }
             }
         });
     }
@@ -41,14 +49,17 @@ class WebsocketObserver implements IObserver {
 			updateValues();
 		} else if (e instanceof TpnControllerInterface.GameOverEvent && !end) {
 			end = true;
+		    gameOver();
 		} else if (e instanceof TpnControllerInterface.NewGameEvent) {
 			end = false;
+			updateValues();
 		}
     } 
     
     private void updateValues() {
         JsonNodeFactory nodeFactory = JsonNodeFactory.instance ;
         ObjectNode node = nodeFactory.objectNode();
+        node.put("eventType", "UpdateView");
         
         int fieldSize = controller.getSize();
         
@@ -63,8 +74,28 @@ class WebsocketObserver implements IObserver {
             grid.add(row);
         }
         
+        System.out.printf("fieldSize: %d, gridsize: %d\n", fieldSize, grid.size());
+        
         node.put("fieldSize", fieldSize);
         node.put("grid", grid);
+        
+        out.write(node);
+    }
+    
+    private void gameOver() {
+        JsonNodeFactory nodeFactory = JsonNodeFactory.instance ;
+        ObjectNode node = nodeFactory.objectNode();
+        node.put("eventType", "GameOver");
+        
+        int points = 0;
+        int fieldSize = controller.getSize();
+        for (int i = 0; i < fieldSize; ++i) {
+            for (int j = 0; j < fieldSize; ++j) {
+                points += controller.getValue(i, j);
+            }
+        }
+        node.put("name", "name");
+        node.put("points", points);
         
         out.write(node);
     }

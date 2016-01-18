@@ -9,7 +9,7 @@ GET     /                           controllers.Application.index()
 GET     /public                     controllers.Application.publicGame()
 GET     /private                    controllers.Application.privateGame()
 GET     /gui                        controllers.Application.startGUI()
-GET     /game/:command              controllers.Application.sendCommand(command:String)
+GET     /ajax                       controllers.Application.ajaxGame()
 
 GET     /json                       controllers.Application.json()
 GET     /json/:command              controllers.Application.jsonCommand(command:String)

@@ -2,7 +2,7 @@ angular.module('myApp', [])
 .controller('tpnController', function($scope){
     $scope.highscores = [];
     $scope.playerName = "";
-    $scope.limit = 5;
+    $scope.limit = 10;
     $scope.addHighscore = function(highscore){
         
         $scope.highscores.push(highscore);
@@ -10,13 +10,22 @@ angular.module('myApp', [])
 });
 
 var socket = new WebSocket("ws://" + location.host + "/socket");
-var counter = 0;
 socket.onopen = function() {
     console.log("onopen");
 };
 socket.onmessage = function(message) {
     resultObj = JSON.parse(message.data);
-    console.log(resultObj.index);
+
+    if (resultObj.eventType === "UpdateView") {
+	onUpdateView(resultObj);
+    } else if (resultObj.eventType === "GameOver") {
+	onGameOver(resultObj);
+    }
+    
+
+};
+
+function onUpdateView(resultObj) {
     var fieldSize = resultObj.fieldSize;
     for (i = 0; i < fieldSize; ++i) {
         for (j = 0; j < fieldSize; ++j) {
@@ -28,16 +37,17 @@ socket.onmessage = function(message) {
                 .html(resultObj.grid[i][j].value);
         }
     }
-    
-    if(true){
-        var ngScope = angular.element(document.querySelector('#scope')).scope();
-        ngScope.$apply(ngScope.addHighscore({
-            name: counter + 'name',
-            points: counter*100
-        }));
-        counter++;
-    }
-};
+}
+
+function onGameOver(resultObj) {
+    alert("Game Over\nDeine Punkte: " + resultObj.points);
+    var ngScope = angular.element(document.querySelector('#scope')).scope();
+    ngScope.$apply(ngScope.addHighscore({
+	name: resultObj.name,
+	points: resultObj.points
+    }));
+}
+
 socket.onerror = function() {
     console.log("onerror");
     socket.close();
@@ -48,9 +58,16 @@ socket.onclose = function() {
 };
 
 $(function() {
-    $("#down_button").click(function(ev) {
-        window.location.replace("/game/s");
+    $("#newGameButton").click(function() {
+	console.log("newGame");
+        socket.send(JSON.stringify({
+            eventType: "newGame"
+        }));
     });
+    $("#abc").click(function() {
+	alert('habc clicked');
+    });
+
     $(document).bind('keydown',function(event) {
         var direction;
         switch(event.which) {
@@ -75,6 +92,7 @@ $(function() {
         }
         
         socket.send(JSON.stringify({
+            eventType: "command",
             d: direction
         }));
     });
