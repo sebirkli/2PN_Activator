@@ -19,11 +19,13 @@ class WebsocketObserver implements IObserver {
     WebSocket.Out<JsonNode> out;
     WebSocket.In<JsonNode> in;
     TpnControllerInterface controller;
+    String name;
     public WebsocketObserver(TpnControllerInterface c, WebSocket.Out<JsonNode> o,
-                                WebSocket.In<JsonNode> i) {
+                                WebSocket.In<JsonNode> i, String nickname) {
         out = o;
         in = i;
         controller = c;
+        name = nickname;
         controller.addObserver(this);
         
         in.onMessage(new F.Callback<JsonNode>() {
@@ -33,7 +35,12 @@ class WebsocketObserver implements IObserver {
                     return;
                 }
                 if (eventType.asText().equals("newGame")) {
-                    controller.gameInit(5,3);
+                    try {
+                        int size = Integer.parseInt(event.get("size").asText());
+                        int nrnew = Integer.parseInt(event.get("new").asText());
+                        controller.gameInit(size, nrnew);
+                    } catch (Exception e) {
+                    }
                 } else if (eventType.asText().equals("command")) {
                     controller.processInput(event.get("d").asText());
                 }
@@ -94,7 +101,7 @@ class WebsocketObserver implements IObserver {
                 points += controller.getValue(i, j);
             }
         }
-        node.put("name", "name");
+        node.put("name", name);
         node.put("points", points);
         
         out.write(node);

@@ -135,9 +135,10 @@ public class Application extends Controller {
     
     public WebSocket<JsonNode> socket() {
         TpnControllerInterface c = curController();
+        String name = session("nickname") == null ? "Player" : session("nickname");
         return new WebSocket<JsonNode>() {
             public void onReady(WebSocket.In<JsonNode> in, WebSocket.Out<JsonNode> out) {
-                new WebsocketObserver(c, out, in);
+                new WebsocketObserver(c, out, in, name);
             }
         };
     }

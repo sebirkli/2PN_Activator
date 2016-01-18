@@ -49,9 +49,11 @@ socket.onclose = function() {
 };
 
 $(function() {
-    $("#newGameButton").click(function() {
+    $("#createNewGame").click(function() {
         socket.send(JSON.stringify({
-            eventType: "newGame"
+            eventType: "newGame",
+            size: $('#sizeNumber').val(),
+            new: $('#newNumber').val()
         }));
     });
 
