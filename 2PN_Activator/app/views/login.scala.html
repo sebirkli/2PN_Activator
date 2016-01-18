@@ -1,6 +1,6 @@
-@(form: play.data.Form[Application.User])(app: Application)
+@(form: play.data.Form[Application.User])
 
-@main("Welcome to 2PN", app) {
+@main("Welcome to 2PN") {
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
 
@@ -64,36 +64,38 @@
 
     <h1>2PN Login</h1>
 
-    <div class="login" >
-        <div>
-        @helper.form(routes.Application.authenticate) {
-            @if(form.hasGlobalErrors) {
-                <div class="alert alert-success">
-                @form.globalError.message
+    <div class="box-in-the-middle" >
+        <div class="login" >
+            <div>
+            @helper.form(routes.Application.authenticate) {
+                @if(form.hasGlobalErrors) {
+                    <div class="alert alert-success">
+                    @form.globalError.message
+                    </div>
+                }
+                <div class="form-group">
+                    <label for="email">Email Adresse</label>
+                    <input type="email" class="form-control" name="email" id="email" placeholder="Enter email" value="@form("email").value">
+                </div>
+                <div class="form-group">
+                    <label for="password">Passwort</label>
+                    <input type="password" class="form-control" name="password" id="password" placeholder="Enter password">
+                </div>
+                <button type="submit" class="btn btn-default">Login</button>
+                <a type="button" class="btn btn-default" href="@routes.Application.signup">Register</a>
+    
+                <div class="btn-group">
+                    <div class="fb-like" data-share="true" data-width="450" data-show-faces="true">
+                    </div>
+    
+                    <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+                    </fb:login-button>
+    
+                    <div id="status">
+                    </div>
                 </div>
             }
-            <div class="form-group">
-                <label for="email">Email Adresse</label>
-                <input type="email" class="form-control" name="email" id="email" placeholder="Enter email" value="@form("email").value">
             </div>
-            <div class="form-group">
-                <label for="password">Passwort</label>
-                <input type="password" class="form-control" name="password" id="password" placeholder="Enter password">
-            </div>
-            <button type="submit" class="btn btn-default">Login</button>
-            <a type="button" class="btn btn-default" href="@routes.Application.signup">Register</a>
-
-            <div class="btn-group">
-                <div class="fb-like" data-share="true" data-width="450" data-show-faces="true">
-                </div>
-
-                <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-                </fb:login-button>
-
-                <div id="status">
-                </div>
-            </div>
-        }
         </div>
     </div>
 }

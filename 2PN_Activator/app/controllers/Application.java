@@ -46,7 +46,7 @@ public class Application extends Controller {
 
     @play.mvc.Security.Authenticated(Secured.class)
     public Result index() {
-        return ok(index.render(this));
+        return ok(index.render());
     }
     
     public Result startGUI() {
@@ -148,11 +148,11 @@ public class Application extends Controller {
         if (session("email") != null) {
             return index();
         }
-        return ok(views.html.login.render(Form.form(User.class), this));
+        return ok(views.html.login.render(Form.form(User.class)));
     }
 
     public Result signupForm() {
-        return ok(views.html.signup.render(Form.form(User.class), this));
+        return ok(views.html.signup.render(Form.form(User.class)));
     }
 
     public Result logout() {
@@ -170,7 +170,7 @@ public class Application extends Controller {
             if (!user.loggedIn) {
                 flash("errors", "Wrong username or password");
             }
-            return badRequest(views.html.login.render(loginform, this));
+            return badRequest(views.html.login.render(loginform));
         } else {
             session().clear();
             session("email", user.email);
@@ -192,7 +192,7 @@ public class Application extends Controller {
             if (exists) {
                 flash("errors", "Account already exists");
             }
-            return badRequest(views.html.signup.render(loginform, this));
+            return badRequest(views.html.signup.render(loginform));
         } else {
             registeredUsers.put(account.email, loginform.get().password);
             session().clear();
