@@ -72,11 +72,9 @@
 
         var fbUser = "facebook/" + String(response.email) + "/" + String(response.first_name);
 
-        $.get(fbUser);
-
-        /*$.get(fbUser, function(data) {
-                    window.top.location.reload();
-        });*/
+        $.get(fbUser, function(data) {
+                    window.top.location.reload() = "http://tpn.herokuapp.com/"
+        });
     });
   }
 
