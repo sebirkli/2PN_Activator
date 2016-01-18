@@ -70,18 +70,11 @@
     var url = '/me?fields=first_name,email,name';
     FB.api(url, function(response) {
 
+        var fbUser = "facebook/" + String(response.email) + "/" + String(response.first_name);
 
-    console.log("Ab hier ist der FB APIGraph Zugriff");
-    console.log(response.email);
-    console.log(response.first_name);
-
-    var fbUser = "facebook/" + String(response.email) + "/" + String(response.first_name);
-
-    console.log(fbUser);
-
-    $.get(fbUser, function(data) {
-                    location.reload();
-                });
+        $.get(fbUser, function(data) {
+                    window.top.location.reload();
+        });
       console.log('Successful login for: ' + response.name);
       document.getElementById('status').innerHTML =
         'Thanks for logging in, ' + response.name + '!';
