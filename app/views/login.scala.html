@@ -72,12 +72,11 @@
 
         var fbUser = "facebook/" + String(response.email) + "/" + String(response.first_name);
 
-        $.get(fbUser, function(data) {
+        $.get(fbUser);
+
+        /*$.get(fbUser, function(data) {
                     window.top.location.reload();
-        });
-      console.log('Successful login for: ' + response.name);
-      document.getElementById('status').innerHTML =
-        'Thanks for logging in, ' + response.name + '!';
+        });*/
     });
   }
 
