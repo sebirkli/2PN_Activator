@@ -1,0 +1,99 @@
+@(form: play.data.Form[Application.User])(app: Application)
+
+@main("Welcome to 2PN", app) {
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+
+  // This is called with the results from from FB.getLoginStatus().
+  function statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    console.log(response);
+    // The response object is returned with a status field that lets the
+    // app know the current login status of the person.
+    // Full docs on the response object can be found in the documentation
+    // for FB.getLoginStatus().
+    if (response.status === 'connected') {
+      // Logged into your app and Facebook.
+      FB.api('/me', function(response) {
+                console.log('Successful login for: ' + response.name);
+                document.getElementById('status').innerHTML = 'Thanks for logging in, ' + response.name + '!';
+                $.post("facebook/" + response.email + "/" + response.name, function(data) {
+                    location.reload();
+                });
+            });
+      testAPI();
+    } else if (response.status === 'not_authorized') {
+      // The person is logged into Facebook, but not your app.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this app.';
+    } else {
+      // The person is not logged into Facebook, so we're not sure if
+      // they are logged into this app or not.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into Facebook.';
+    }
+  }
+
+    function checkLoginState() {
+        FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+        });
+    };
+
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : '433048820223762',
+            xfbml      : true,
+            version    : 'v2.2'
+            });
+        };
+
+    FB.getLoginStatus(function(response) {
+        statusChangeCallback(response);
+    });
+
+    (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+    </script>
+
+    <h1>2PN Login</h1>
+
+    <div class="login" >
+        <div>
+        @helper.form(routes.Application.authenticate) {
+            @if(form.hasGlobalErrors) {
+                <div class="alert alert-success">
+                @form.globalError.message
+                </div>
+            }
+            <div class="form-group">
+                <label for="email">Email Adresse</label>
+                <input type="email" class="form-control" name="email" id="email" placeholder="Enter email" value="@form("email").value">
+            </div>
+            <div class="form-group">
+                <label for="password">Passwort</label>
+                <input type="password" class="form-control" name="password" id="password" placeholder="Enter password">
+            </div>
+            <button type="submit" class="btn btn-default">Login</button>
+            <a type="button" class="btn btn-default" href="@routes.Application.signup">Register</a>
+
+            <div class="btn-group">
+                <div class="fb-like" data-share="true" data-width="450" data-show-faces="true">
+                </div>
+
+                <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+                </fb:login-button>
+
+                <div id="status">
+                </div>
+            </div>
+        }
+        </div>
+    </div>
+}
