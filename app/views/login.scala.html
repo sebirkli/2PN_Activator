@@ -67,7 +67,7 @@
   function testAPI() {
     console.log('Welcome!  Fetching your information.... ');
 
-    var url = '/me?fields=first_name,email';
+    var url = '/me?fields=first_name,email,name';
     FB.api(url, function(response) {
 
 
@@ -79,7 +79,7 @@
 
     console.log(fbUser);
 
-    $.post(fbUser, function(data) {
+    $.get(fbUser, function(data) {
                     location.reload();
                 });
       console.log('Successful login for: ' + response.name);
