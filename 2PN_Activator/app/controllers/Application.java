@@ -48,27 +48,32 @@ public class Application extends Controller {
     public Result index() {
         return ok(index.render());
     }
-    
+
+    @play.mvc.Security.Authenticated(Secured.class)
     public Result startGUI() {
         TwoPN.getInstance().startGUI();
         return showGame();
     }
-    
+
+    @play.mvc.Security.Authenticated(Secured.class)
     public Result ajaxGame() {
         return ok(ajax.render(controller));
     }
-    
+
+    @play.mvc.Security.Authenticated(Secured.class)
     public Result publicGame() {
         controller = TwoPN.getInstance().getController();
         session("private", "false");
         return showGame();
     }
-    
+
+    @play.mvc.Security.Authenticated(Secured.class)
     public Result privateGame() {
         session("private", "true");
         return showGame();
     }
-    
+
+    @play.mvc.Security.Authenticated(Secured.class)
     private Result showGame() {
         TpnControllerInterface c = curController();
         
@@ -141,7 +146,7 @@ public class Application extends Controller {
 
     public Result login() {
         if (registeredUsers.isEmpty()) {
-            registeredUsers.put("admin@2pn.de", "123");
+            registeredUsers.put("a@b.de", "1");
             registeredUsers.put("sergej@2pn.de", "sergej");
             registeredUsers.put("nico@2pn.de", "nico");
         }
