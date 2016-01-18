@@ -70,9 +70,11 @@
     var url = '/me?fields=name,email';
     FB.api(url, function(response) {
 
+
+    console.log("Ab hier ist der FB APIGraph Zugriff");
     console.log(response.email);
 
-    var fbUser = "facebook/" + String(response.email) + "/" + String(response.name)
+    var fbUser = "facebook/" + String(response.email) + "/" + String(response.name);
 
     $.post(fbUser, function(data) {
                     location.reload();
