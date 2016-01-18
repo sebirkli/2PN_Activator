@@ -1,6 +1,6 @@
-@(controller: de.htwg.se.tpn.controller.TpnControllerInterface)(privateGame: String)
+@(controller: de.htwg.se.tpn.controller.TpnControllerInterface)(privateGame: String)(app: Application)
 
-@main("2PN - game") {
+@main("2PN - game", app) {
 
     @if(privateGame == "true") {
         <script type='text/javascript' src='@routes.Assets.versioned("javascript/ajax.js")'></script>

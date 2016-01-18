@@ -1,30 +1,52 @@
 package controllers;
 
-import play.*;
-import play.mvc.*;
+// Game
 import de.htwg.se.tpn.TwoPN;
 import de.htwg.se.tpn.controller.TpnController;
 import de.htwg.se.tpn.controller.TpnControllerInterface;
+import play.data.Form;
+import play.data.DynamicForm;
+import play.mvc.Security;
+import play.libs.openid.*;
+import play.libs.F;
+import play.mvc.Http.Context;
+import controllers.WebsocketObserver;
+
+// Fasterxml
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+
+// Play
+import play.*;
+import play.mvc.*;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
+import views.html.*;
+
+// Java
 import java.util.LinkedList;
-import controllers.WebsocketObserver;
-
-import com.fasterxml.jackson.databind.JsonNode;
-
 import java.util.HashMap;
 import java.util.Map;
-
-import views.html.*;
+import javax.swing.JOptionPane;
+import java.awt.*;
+import java.awt.image.IndexColorModel;
+import java.lang.Integer;
+import java.util.concurrent.TimeUnit;
 
 public class Application extends Controller {
 
     static HashMap<String, TpnControllerInterface> uuidToController = new HashMap<>();
     static TpnControllerInterface controller = TwoPN.getInstance().getController();
+    static Map<String, String> registeredUsers = new HashMap<String, String>();
 
+    @play.mvc.Security.Authenticated(Secured.class)
     public Result index() {
-        return ok(index.render());
+        return ok(index.render(this));
     }
     
     public Result startGUI() {
@@ -57,7 +79,7 @@ public class Application extends Controller {
             isPrivate = "false";
         }
         
-        return ok(tpn.render(c, isPrivate));
+        return ok(tpn.render(c, isPrivate, this));
     }
 
     public Result jsonCommand(String command) {
@@ -120,4 +142,130 @@ public class Application extends Controller {
             }
         };
     }
+
+    // Login Authentication
+
+    public Result login() {
+        if (registeredUsers.isEmpty()) {
+            registeredUsers.put("admin@2pn.de", "123");
+            registeredUsers.put("sergej@2pn.de", "sergej");
+            registeredUsers.put("nico@2pn.de", "nico");
+        }
+        if (session("email") != null) {
+            return index();
+        }
+        return ok(views.html.login.render(Form.form(User.class), this));
+    }
+
+    public Result signupForm() {
+        return ok(views.html.signup.render(Form.form(User.class), this));
+    }
+
+    public Result logout() {
+        session().clear();
+        return redirect(routes.Application.index());
+    }
+
+    public Result authenticate() {
+        Form<User> loginform = DynamicForm.form(User.class).bindFromRequest();
+        User user = User.authenticate(loginform.get());
+        if (loginform.hasErrors() || !user.loggedIn) {
+            ObjectNode response = Json.newObject();
+            response.put("success", false);
+            response.put("errors", "");
+            if (!user.loggedIn) {
+                flash("errors", "Wrong username or password");
+            }
+            return badRequest(views.html.login.render(loginform, this));
+        } else {
+            session().clear();
+            session("email", user.email);
+            session("nickname", user.nickname());
+            return redirect(routes.Application.index());
+        }
+    }
+
+    public Result signup() {
+        Form<User> loginform = DynamicForm.form(User.class).bindFromRequest();
+
+        ObjectNode response = Json.newObject();
+        User account = loginform.get();
+        boolean exists = registeredUsers.keySet().contains(account.email);
+
+        if (loginform.hasErrors() || exists) {
+            response.put("success", false);
+            response.put("errors", loginform.errorsAsJson());
+            if (exists) {
+                flash("errors", "Account already exists");
+            }
+            return badRequest(views.html.signup.render(loginform, this));
+        } else {
+            registeredUsers.put(account.email, loginform.get().password);
+            session().clear();
+            session("email", account.email);
+            session("nickname", account.nickname());
+            return redirect(routes.Application.index());
+        }
+    }
+
+    public Result facebook(String email, String name) {
+        session().clear();
+        session("email", email);
+        session("nickname", name);
+        return redirect(routes.Application.index());
+    }
+
+
+    public static class User {
+
+        public String email;
+        public String password;
+        public boolean loggedIn;
+
+        public static User authenticate(User user) {
+            String realPassword = registeredUsers.get(user.email);
+            boolean match = user.password.equals(realPassword);
+            return new User(user.email, user.password, match);
+        }
+
+        public User() {
+            this("");
+        }
+
+        public User(String email) {
+            this(email, "", false);
+        }
+
+        private User(String email, String password, boolean loggedIn) {
+            this.email = email;
+            this.password = password;
+            this.loggedIn = loggedIn;
+        }
+
+        public String nickname() {
+            return email.substring(0, email.indexOf("@"));
+        }
+    }
+
+    public static class Secured extends Security.Authenticator {
+
+        @Override
+        public String getUsername(Context ctx) {
+            return ctx.session().get("email");
+        }
+
+        @Override
+        public Result onUnauthorized(Context ctx) {
+            return redirect(routes.Application.login());
+        }
+    }
+
+    public String getNickName() {
+        return session("nickname");
+    }
+
+    public boolean isLoggedIn() {
+        return session("nickname") != null && !session("nickname").isEmpty();
+    }
+
 }
