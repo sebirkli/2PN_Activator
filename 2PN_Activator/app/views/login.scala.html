@@ -83,13 +83,15 @@
             <button type="submit" class="btn btn-default">Login</button>
             <a type="button" class="btn btn-default" href="@routes.Application.signup">Register</a>
 
-            <div class="fb-like" data-share="true" data-width="450" data-show-faces="true">
-            </div>
+            <div class="btn-group">
+                <div class="fb-like" data-share="true" data-width="450" data-show-faces="true">
+                </div>
 
-            <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-            </fb:login-button>
+                <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+                </fb:login-button>
 
-            <div id="status">
+                <div id="status">
+                </div>
             </div>
         }
         </div>
