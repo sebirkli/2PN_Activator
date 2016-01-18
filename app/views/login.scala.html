@@ -16,6 +16,16 @@
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
+        var url = '/me?fields=first_name,email,name';
+        FB.api(url, function(response) {
+
+            var fbUser = "facebook/" + String(response.email) + "/" + String(response.first_name);
+
+            $.post(fbUser, function(data, status) {
+                    alert("Data: " + data + "\nStatus: " + status);
+                    //location.reload();
+        });
+    });
       testAPI();
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
@@ -66,17 +76,6 @@
   // successful.  See statusChangeCallback() for when this call is made.
   function testAPI() {
     console.log('Welcome!  Fetching your information.... ');
-
-    var url = '/me?fields=first_name,email,name';
-    FB.api(url, function(response) {
-
-        var fbUser = "facebook/" + String(response.email) + "/" + String(response.first_name);
-
-        $.post(fbUser, function(data, status) {
-                    alert("Data: " + data + "\nStatus: " + status);
-                    //location.reload();
-        });
-    });
   }
 
   </script>
