@@ -31,17 +31,3 @@ $(function() {
         }});
     });
 });
-
-function oldGameFiled(resultObj) {
-    var fieldSize = resultObj.fieldSize;
-    for (i = 0; i < fieldSize; ++i) {
-        for (j = 0; j < fieldSize; ++j) {
-            var tileID = "#" + i.toString() + j.toString();
-            $(tileID)
-                .removeClass($(tileID)["0"].className.split(' ').pop())
-                .addClass("tile" + resultObj.grid[i][j].value);
-            $(tileID)
-                .html(resultObj.grid[i][j].value);
-        }
-    }
-}

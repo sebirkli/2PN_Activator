@@ -33,7 +33,7 @@ class WebsocketObserver implements IObserver {
                     return;
                 }
                 if (eventType.asText().equals("newGame")) {
-                    controller.gameInit(4,3);
+                    controller.gameInit(5,3);
                 } else if (eventType.asText().equals("command")) {
                     controller.processInput(event.get("d").asText());
                 }

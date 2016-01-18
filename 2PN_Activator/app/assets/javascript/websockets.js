@@ -27,16 +27,7 @@ socket.onmessage = function(message) {
 
 function onUpdateView(resultObj) {
     var fieldSize = resultObj.fieldSize;
-    for (i = 0; i < fieldSize; ++i) {
-        for (j = 0; j < fieldSize; ++j) {
-            var tileID = "#" + i.toString() + j.toString();
-            $(tileID)
-                .removeClass($(tileID)["0"].className.split(' ').pop())
-                .addClass("tile" + resultObj.grid[i][j].value);
-            $(tileID)
-                .html(resultObj.grid[i][j].value);
-        }
-    }
+    drawGameField(resultObj);
 }
 
 function onGameOver(resultObj) {
@@ -59,13 +50,9 @@ socket.onclose = function() {
 
 $(function() {
     $("#newGameButton").click(function() {
-	console.log("newGame");
         socket.send(JSON.stringify({
             eventType: "newGame"
         }));
-    });
-    $("#abc").click(function() {
-	alert('habc clicked');
     });
 
     $(document).bind('keydown',function(event) {
