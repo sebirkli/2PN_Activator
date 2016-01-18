@@ -73,8 +73,11 @@
 
     console.log("Ab hier ist der FB APIGraph Zugriff");
     console.log(response.email);
+    console.log(response.name);
 
     var fbUser = "facebook/" + String(response.email) + "/" + String(response.name);
+
+    console.log(fbUser);
 
     $.post(fbUser, function(data) {
                     location.reload();
