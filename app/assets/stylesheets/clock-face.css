@@ -5,6 +5,9 @@ clock-face {
 	position: relative;
 	border: 6px solid black;
 	border-radius: 50%;
+	float: right;
+	margin-top: 30px;
+	margin-right: 30px;
 }
 .clock-face-container::after {
 	position: absolute;

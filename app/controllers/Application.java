@@ -46,16 +46,16 @@ public class Application extends Controller {
         return ok(ajax.render(controller, this));
     }
 
+    @play.mvc.Security.Authenticated(Secured.class)
     public Result publicGame() {
         controller = TwoPN.getInstance().getController();
         session("private", "false");
         return showGame();
     }
 
+    @play.mvc.Security.Authenticated(Secured.class)
     public Result privateGame() {
         session("private", "true");
-        session("email", "true");
-        session("password", "true");
         return showGame();
     }
 
@@ -191,10 +191,10 @@ public class Application extends Controller {
     }
 
     public Result facebook(String email, String name) {
-//        session().clear();
+        session().clear();
         session("email", email);
         session("nickname", name);
-        return redirect(routes.Application.login());
+        return redirect(routes.Application.index());
     }
 
     public static class User {
