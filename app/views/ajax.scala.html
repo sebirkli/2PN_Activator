@@ -1,6 +1,6 @@
-@(controller: de.htwg.se.tpn.controller.TpnControllerInterface)
+@(controller: de.htwg.se.tpn.controller.TpnControllerInterface)(app: Application)
 
-@main("2PN - game") {
+@main("2PN - game", app) {
     <script type='text/javascript' src='@routes.Assets.versioned("javascript/ajax.js")'></script>
     <div class="container">
             @gamefield(controller)

@@ -4,39 +4,26 @@ package controllers;
 import de.htwg.se.tpn.TwoPN;
 import de.htwg.se.tpn.controller.TpnController;
 import de.htwg.se.tpn.controller.TpnControllerInterface;
-import play.data.Form;
-import play.data.DynamicForm;
-import play.mvc.Security;
-import play.libs.openid.*;
-import play.libs.F;
-import play.mvc.Http.Context;
-import controllers.WebsocketObserver;
+import views.html.*;
 
 // Fasterxml
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.JsonNode;
 
 // Play
-import play.*;
 import play.mvc.*;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.*;
+import play.mvc.Http.Context;
+import play.data.Form;
+import play.data.DynamicForm;
 
 // Java
 import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.JOptionPane;
-import java.awt.*;
-import java.awt.image.IndexColorModel;
-import java.lang.Integer;
-import java.util.concurrent.TimeUnit;
 
 public class Application extends Controller {
 
@@ -46,18 +33,17 @@ public class Application extends Controller {
 
     @play.mvc.Security.Authenticated(Secured.class)
     public Result index() {
-        return ok(index.render());
+        return ok(index.render(this));
     }
 
-    @play.mvc.Security.Authenticated(Secured.class)
     public Result startGUI() {
-        TwoPN.getInstance().startGUI();
+        //TwoPN.getInstance().startGUI();
         return showGame();
     }
 
     @play.mvc.Security.Authenticated(Secured.class)
     public Result ajaxGame() {
-        return ok(ajax.render(controller));
+        return ok(ajax.render(controller, this));
     }
 
     @play.mvc.Security.Authenticated(Secured.class)
@@ -73,11 +59,9 @@ public class Application extends Controller {
         return showGame();
     }
 
-    @play.mvc.Security.Authenticated(Secured.class)
     private Result showGame() {
         TpnControllerInterface c = curController();
-        
-        return ok(tpn.render(c));
+        return ok(tpn.render(c, this));
     }
 
     public Result jsonCommand(String command) {
@@ -97,7 +81,6 @@ public class Application extends Controller {
             }
             c = uuidToController.get(uuid);
         }
-    
         return c;
     }
     
@@ -114,7 +97,6 @@ public class Application extends Controller {
         TpnControllerInterface c = curController();
         
         int fieldSize = c.getSize();
-        
         Map<String, Object> grid[][] = new HashMap[fieldSize][fieldSize];
 
         for (int i = 0; i < fieldSize; ++i) {
@@ -154,11 +136,11 @@ public class Application extends Controller {
         if (session("email") != null) {
             return index();
         }
-        return ok(views.html.login.render(Form.form(User.class)));
+        return ok(views.html.login.render(Form.form(User.class), this));
     }
 
     public Result signupForm() {
-        return ok(views.html.signup.render(Form.form(User.class)));
+        return ok(views.html.signup.render(Form.form(User.class), this));
     }
 
     public Result logout() {
@@ -176,7 +158,7 @@ public class Application extends Controller {
             if (!user.loggedIn) {
                 flash("errors", "Wrong username or password");
             }
-            return badRequest(views.html.login.render(loginform));
+            return badRequest(views.html.login.render(loginform, this));
         } else {
             session().clear();
             session("email", user.email);
@@ -198,7 +180,7 @@ public class Application extends Controller {
             if (exists) {
                 flash("errors", "Account already exists");
             }
-            return badRequest(views.html.signup.render(loginform));
+            return badRequest(views.html.signup.render(loginform, this));
         } else {
             registeredUsers.put(account.email, loginform.get().password);
             session().clear();
@@ -215,7 +197,6 @@ public class Application extends Controller {
         return redirect(routes.Application.index());
     }
 
-
     public static class User {
 
         public String email;
@@ -223,9 +204,10 @@ public class Application extends Controller {
         public boolean loggedIn;
 
         public static User authenticate(User user) {
-            String realPassword = registeredUsers.get(user.email);
-            boolean match = user.password.equals(realPassword);
-            return new User(user.email, user.password, match);
+            //String realPassword = registeredUsers.get(user.email);
+            //boolean match = user.password.equals(realPassword);
+            //return new User(user.email, user.password, match);
+            return new User("email@gmx.de", "password", true);
         }
 
         public User() {
