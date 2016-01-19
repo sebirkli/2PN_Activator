@@ -36,7 +36,7 @@
                             <th>Name</th>
                             <th>Points</th> 
                         </tr>
-                        <tr ng-repeat="highscore in highscores | filter:{name: playerName} | orderBy:'-highscore.points' | limitTo:limit">
+                        <tr ng-repeat="highscore in highscores | filter:{name: playerName} | orderBy:'-points' | limitTo:limit">
                             <td>{{highscore.name}}</td>      
                             <td>{{highscore.points}}</td>      
                         </tr>

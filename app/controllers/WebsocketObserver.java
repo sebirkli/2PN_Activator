@@ -80,9 +80,7 @@ class WebsocketObserver implements IObserver {
             }
             grid.add(row);
         }
-        
-        System.out.printf("fieldSize: %d, gridsize: %d\n", fieldSize, grid.size());
-        
+
         node.put("fieldSize", fieldSize);
         node.put("grid", grid);
         
