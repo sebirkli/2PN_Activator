@@ -191,9 +191,9 @@ public class Application extends Controller {
     }
 
     public Result facebook(String email, String name) {
-        session().clear();
-        session("email", email);
-        session("nickname", name);
+//        session().clear();
+//        session("email", email);
+//        session("nickname", name);
         return redirect(routes.Application.index());
     }
 
