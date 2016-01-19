@@ -46,16 +46,16 @@ public class Application extends Controller {
         return ok(ajax.render(controller, this));
     }
 
-    @play.mvc.Security.Authenticated(Secured.class)
     public Result publicGame() {
         controller = TwoPN.getInstance().getController();
         session("private", "false");
         return showGame();
     }
 
-    @play.mvc.Security.Authenticated(Secured.class)
     public Result privateGame() {
         session("private", "true");
+        session("email", "true");
+        session("password", "true");
         return showGame();
     }
 
