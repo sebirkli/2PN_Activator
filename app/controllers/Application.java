@@ -36,7 +36,6 @@ public class Application extends Controller {
         return ok(index.render(this));
     }
 
-    @play.mvc.Security.Authenticated(Secured.class)
     public Result startGUI() {
         //TwoPN.getInstance().startGUI();
         return showGame();
@@ -60,7 +59,6 @@ public class Application extends Controller {
         return showGame();
     }
 
-    @play.mvc.Security.Authenticated(Secured.class)
     private Result showGame() {
         TpnControllerInterface c = curController();
         return ok(tpn.render(c, this));
@@ -209,7 +207,7 @@ public class Application extends Controller {
             //String realPassword = registeredUsers.get(user.email);
             //boolean match = user.password.equals(realPassword);
             //return new User(user.email, user.password, match);
-            return new User("email", "password", true);
+            return new User("email@gmx.de", "password", true);
         }
 
         public User() {
