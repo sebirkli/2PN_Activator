@@ -22,7 +22,6 @@
             var fbUser = "facebook/" + String(responseData.email) + "/" + String(responseData.first_name);
 
             $.get(fbUser, function(data, status) {
-                    alert("Data: " + data + "\nStatus: " + status);
                     location.reload();
         });
     });
