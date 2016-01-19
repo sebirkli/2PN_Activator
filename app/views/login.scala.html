@@ -21,9 +21,9 @@
 
             var fbUser = "facebook/" + String(response.email) + "/" + String(response.first_name);
 
-            $.post(fbUser, function(data, status) {
+            $.get(fbUser, function(data, status) {
                     alert("Data: " + data + "\nStatus: " + status);
-                    //location.reload();
+                    location.reload();
         });
     });
       testAPI();
