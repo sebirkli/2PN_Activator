@@ -5,17 +5,12 @@ import de.htwg.se.tpn.TwoPN;
 import de.htwg.se.tpn.controller.TpnController;
 import de.htwg.se.tpn.controller.TpnControllerInterface;
 import views.html.*;
-import controllers.WebsocketObserver;
 
 // Fasterxml
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.JsonNode;
 
 // Play
-import play.*;
 import play.mvc.*;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -24,18 +19,11 @@ import play.mvc.Security;
 import play.mvc.Http.Context;
 import play.data.Form;
 import play.data.DynamicForm;
-import play.libs.openid.*;
-import play.libs.F;
 
 // Java
 import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.JOptionPane;
-import java.awt.*;
-import java.awt.image.IndexColorModel;
-import java.lang.Integer;
-import java.util.concurrent.TimeUnit;
 
 public class Application extends Controller {
 
@@ -75,7 +63,6 @@ public class Application extends Controller {
     @play.mvc.Security.Authenticated(Secured.class)
     private Result showGame() {
         TpnControllerInterface c = curController();
-        
         return ok(tpn.render(c, this));
     }
 
@@ -96,7 +83,6 @@ public class Application extends Controller {
             }
             c = uuidToController.get(uuid);
         }
-    
         return c;
     }
     
@@ -113,7 +99,6 @@ public class Application extends Controller {
         TpnControllerInterface c = curController();
         
         int fieldSize = c.getSize();
-        
         Map<String, Object> grid[][] = new HashMap[fieldSize][fieldSize];
 
         for (int i = 0; i < fieldSize; ++i) {
