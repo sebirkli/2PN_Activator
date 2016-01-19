@@ -18,6 +18,10 @@
         <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
         <script type="text/javascript" src="//connect.facebook.net/en_US/sdk.js"></script>
 
+            <!-- Clock -->
+        <link rel="stylesheet" href='@routes.Assets.versioned("stylesheets/clock-face.css")'>
+	    <script type='text/javascript' src='@routes.Assets.versioned("javascript/clock-face.js")'></script>
+    	
     </head>
     <body>
 
@@ -42,6 +46,7 @@
                 </div>
             </div>
         </nav>
+        <clock-face></clock-face>
         @content
         
         <footer class="footer">
