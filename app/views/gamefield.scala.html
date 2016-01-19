@@ -1,15 +1,20 @@
 @(controller: de.htwg.se.tpn.controller.TpnControllerInterface)
-	
+
 <div id="gameContainer" class="grid game-container">
-    @for(row <- 0 until controller.getSize) {
+<!--    @for(row <- 0 until controller.getSize) {
         @for(column <- 0 until controller.getSize) {
-            <div id="@{row.toString + column.toString}" class="tile square @{"tile" + controller.getValue(row, column)}">
-                <span class="tile-centerd-text">
-                    @controller.getValue(row, column)        
-                </span>
+            <div class="tile square square-box standard-tile-size @{"tile" + controller.getValue(row, column)}">
+                <div class="square-content">
+                    <div>
+                        <span>
+                            @controller.getValue(row, column) 
+                        </span>
+                    </div>
+                    
+                </div>
             </div>
         }
-    }
+    }-->
 </div>
 
 <script type='text/javascript' src='@routes.Assets.versioned("javascript/gameField.js")'></script>
