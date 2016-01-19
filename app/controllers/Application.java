@@ -4,12 +4,7 @@ package controllers;
 import de.htwg.se.tpn.TwoPN;
 import de.htwg.se.tpn.controller.TpnController;
 import de.htwg.se.tpn.controller.TpnControllerInterface;
-import play.data.Form;
-import play.data.DynamicForm;
-import play.mvc.Security;
-import play.libs.openid.*;
-import play.libs.F;
-import play.mvc.Http.Context;
+import views.html.*;
 import controllers.WebsocketObserver;
 
 // Fasterxml
@@ -26,7 +21,11 @@ import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.*;
+import play.mvc.Http.Context;
+import play.data.Form;
+import play.data.DynamicForm;
+import play.libs.openid.*;
+import play.libs.F;
 
 // Java
 import java.util.LinkedList;
@@ -51,7 +50,7 @@ public class Application extends Controller {
 
     @play.mvc.Security.Authenticated(Secured.class)
     public Result startGUI() {
-        TwoPN.getInstance().startGUI();
+        //TwoPN.getInstance().startGUI();
         return showGame();
     }
 
