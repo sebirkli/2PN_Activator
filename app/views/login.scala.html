@@ -1,6 +1,6 @@
-@(form: play.data.Form[Application.User])
+@(form: play.data.Form[Application.User])(app: Application)
 
-@main("Welcome to 2PN") {
+@main("Welcome to 2PN", app) {
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" ></script>
 
@@ -17,9 +17,9 @@
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
         var url = '/me?fields=first_name,email,name';
-        FB.api(url, function(response) {
+        FB.api(url, function(responseData) {
 
-            var fbUser = "facebook/" + String(response.email) + "/" + String(response.first_name);
+            var fbUser = "facebook/" + String(responseData.email) + "/" + String(responseData.first_name);
 
             $.get(fbUser, function(data, status) {
                     alert("Data: " + data + "\nStatus: " + status);
@@ -48,20 +48,9 @@
     });
   }
 
-  window.fbAsyncInit = function() {
-  FB.init({
-    appId      : '433048820223762',
-    cookie     : true,  // enable cookies to allow the server to access
-                        // the session
-    xfbml      : true,  // parse social plugins on this page
-    version    : 'v2.2' // use version 2.2
-  });
-
   FB.getLoginStatus(function(response) {
     statusChangeCallback(response);
   });
-
-  };
 
   // Load the SDK asynchronously
   (function(d, s, id) {

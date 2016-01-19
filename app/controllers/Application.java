@@ -45,7 +45,7 @@ public class Application extends Controller {
 
     @play.mvc.Security.Authenticated(Secured.class)
     public Result index() {
-        return ok(index.render());
+        return ok(index.render(this));
     }
 
     @play.mvc.Security.Authenticated(Secured.class)
@@ -56,7 +56,7 @@ public class Application extends Controller {
 
     @play.mvc.Security.Authenticated(Secured.class)
     public Result ajaxGame() {
-        return ok(ajax.render(controller));
+        return ok(ajax.render(controller, this));
     }
 
     @play.mvc.Security.Authenticated(Secured.class)
@@ -76,7 +76,7 @@ public class Application extends Controller {
     private Result showGame() {
         TpnControllerInterface c = curController();
         
-        return ok(tpn.render(c));
+        return ok(tpn.render(c, this));
     }
 
     public Result jsonCommand(String command) {
@@ -153,11 +153,11 @@ public class Application extends Controller {
         if (session("email") != null) {
             return index();
         }
-        return ok(views.html.login.render(Form.form(User.class)));
+        return ok(views.html.login.render(Form.form(User.class), this));
     }
 
     public Result signupForm() {
-        return ok(views.html.signup.render(Form.form(User.class)));
+        return ok(views.html.signup.render(Form.form(User.class), this));
     }
 
     public Result logout() {
@@ -175,7 +175,7 @@ public class Application extends Controller {
             if (!user.loggedIn) {
                 flash("errors", "Wrong username or password");
             }
-            return badRequest(views.html.login.render(loginform));
+            return badRequest(views.html.login.render(loginform, this));
         } else {
             session().clear();
             session("email", user.email);
@@ -197,7 +197,7 @@ public class Application extends Controller {
             if (exists) {
                 flash("errors", "Account already exists");
             }
-            return badRequest(views.html.signup.render(loginform));
+            return badRequest(views.html.signup.render(loginform, this));
         } else {
             registeredUsers.put(account.email, loginform.get().password);
             session().clear();
@@ -213,7 +213,6 @@ public class Application extends Controller {
         session("nickname", name);
         return redirect(routes.Application.index());
     }
-
 
     public static class User {
 
