@@ -194,7 +194,7 @@ public class Application extends Controller {
 //        session().clear();
         session("email", email);
         session("nickname", name);
-        return redirect(routes.Application.index());
+        return redirect(routes.Application.login());
     }
 
     public static class User {
