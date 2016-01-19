@@ -2,7 +2,15 @@
 
 @main("2PN - game", app) {
     <script type='text/javascript' src='@routes.Assets.versioned("javascript/ajax.js")'></script>
-    <div class="container">
-            @gamefield(controller)
+    <div class="col-md-4">
+        <div style="width: 20%">
+        </div>
+    </div>
+    <div class="col-md-4">
+        @gamefield(controller)
+    </div>
+    <div class="col-md-4">
+        <div style="width: 20%">
+        </div>
     </div>
 }

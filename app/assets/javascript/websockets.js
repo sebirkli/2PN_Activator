@@ -85,4 +85,26 @@ $(function() {
             d: direction
         }));
     });
+
+    var ngScope = angular.element(document.querySelector('#scope')).scope();
+    ngScope.$apply(ngScope.addHighscore({
+        name: "Noob",
+        points: "200"
+    }));
+    ngScope.$apply(ngScope.addHighscore({
+        name: "Beginner",
+        points: "500"
+    }));
+    ngScope.$apply(ngScope.addHighscore({
+        name: "Intermediate",
+        points: "1000"
+    }));
+    ngScope.$apply(ngScope.addHighscore({
+        name: "Pro",
+        points: "2000"
+    }));
+    ngScope.$apply(ngScope.addHighscore({
+        name: "Master",
+        points: "3000"
+    }));
 });

@@ -28,14 +28,15 @@
                   </div>
                 </div>
             
-                <div style="padding-top: 60px"  ng-app="myApp" ng-controller="tpnController" id="scope">
+                <h3 style="padding-top: 10px; padding-bottom: 10px">Highscore</h3>
+                <div style="padding-top: 10px"  ng-app="myApp" ng-controller="tpnController" id="scope">
                     <input type="text" ng-model="playerName" class="form-control" placeholder="Search player">
                     <table class="table table-stripped">
                         <tr>
                             <th>Name</th>
                             <th>Points</th> 
                         </tr>
-                        <tr ng-repeat="highscore in highscores | filter:{name: playerName} | orderBy:'-points' | limitTo:limit">
+                        <tr ng-repeat="highscore in highscores | filter:{name: playerName} | orderBy:'-highscore.points' | limitTo:limit">
                             <td>{{highscore.name}}</td>      
                             <td>{{highscore.points}}</td>      
                         </tr>
