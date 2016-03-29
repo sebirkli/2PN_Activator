@@ -57,6 +57,18 @@ $(function() {
         }));
     });
 
+    $("#saveButton").click(function() {
+        socket.send(JSON.stringify({
+            eventType: "save"
+        }));
+    });
+
+    $("#loadButton").click(function() {
+        socket.send(JSON.stringify({
+            eventType: "load"
+        }));
+    });
+
     $(document).bind('keydown',function(event) {
         var direction;
         switch(event.which) {

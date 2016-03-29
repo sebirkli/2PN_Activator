@@ -7,6 +7,7 @@ package controllers;
 import de.htwg.se.tpn.TwoPN;
 import de.htwg.se.tpn.controller.TpnController;
 import de.htwg.se.tpn.controller.TpnControllerInterface;
+import de.htwg.se.tpn.util.persistence.db4o.*;
 import views.html.*;
 
 // Fasterxml
@@ -30,6 +31,7 @@ import java.util.Map;
 
 public class Application extends Controller {
 
+    static TpnDao dao = new TpnDao();
     static HashMap<String, TpnControllerInterface> uuidToController = new HashMap<>();
     static TpnControllerInterface controller = TwoPN.getInstance().getController();
     static Map<String, String> registeredUsers = new HashMap<String, String>();
@@ -64,7 +66,7 @@ public class Application extends Controller {
 
     private Result showGame() {
         TpnControllerInterface c = curController();
-        return ok(tpn.render(c, this));
+        return ok(tpn.render(c, session("email")));
     }
 
     public Result jsonCommand(String command) {
@@ -80,7 +82,7 @@ public class Application extends Controller {
         if (isPrivate != null && isPrivate.equals("true")) {
             String uuid = curUUID();
             if (!uuidToController.containsKey(uuid)) {
-                uuidToController.put(uuid, new TpnController(4, 2));
+                uuidToController.put(uuid, new TpnController(4, 2, dao));
             }
             c = uuidToController.get(uuid);
         }
@@ -121,9 +123,10 @@ public class Application extends Controller {
     public WebSocket<JsonNode> socket() {
         TpnControllerInterface c = curController();
         String name = session("nickname") == null ? "Player" : session("nickname");
+        String email = session("email") == null ? "web" : session("email");
         return new WebSocket<JsonNode>() {
             public void onReady(WebSocket.In<JsonNode> in, WebSocket.Out<JsonNode> out) {
-                new WebsocketObserver(c, out, in, name);
+                new WebsocketObserver(c, out, in, name, email);
             }
         };
     }

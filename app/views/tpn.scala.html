@@ -1,6 +1,6 @@
-@(controller: de.htwg.se.tpn.controller.TpnControllerInterface)(app: Application)
+@(controller: de.htwg.se.tpn.controller.TpnControllerInterface)(gameId: String)
 
-@main("2PN - game", app) {
+@main("2PN - game") {
 
     <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular.min.js'></script>
 	<script type='text/javascript' src='@routes.Assets.versioned("javascript/websockets.js")'></script>
@@ -11,21 +11,31 @@
             </div>
             <div class="col-md-4">
                 <!-- Small modal -->
-                <button id="newGamePopup" type="button" class="btn btn-defaultv" data-toggle="modal" data-target=".bs-example-modal-sm">New Game</button>
-                
-                <div style="padding-top: 30px" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-                  <div class="modal-dialog modal-sm">
-                    <div class="modal-content">
-                        <div class="form-group">
-                            <h3>New Game</h3>
-                            <label class="ui-hidden-accessible">Size:</label>
-                            <input type="text" id="sizeNumber" />
-                            <label class="ui-hidden-accessible">Number of new Tiles:</label>
-                            <input type="text" id="newNumber" />
-                            <button id="createNewGame" type="button" class="btn btn-defaultv">New Game</button>
+                <div class="row">
+                    <div class="col-md-4">
+                        <button id="newGamePopup" type="button" class="btn btn-defaultv" data-toggle="modal" data-target=".bs-example-modal-sm">New Game</button>
+                        
+                        <div style="padding-top: 30px" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div class="form-group">
+                                        <h3>New Game</h3>
+                                        <label class="ui-hidden-accessible">Size:</label>
+                                        <input type="text" id="sizeNumber" />
+                                        <label class="ui-hidden-accessible">Number of new Tiles:</label>
+                                        <input type="text" id="newNumber" />
+                                        <button id="createNewGame" type="button" class="btn btn-defaultv">New Game</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                  </div>
+                    <div class="col-md-4">
+                        <button id="saveButton" type="button" class="btn btn-defaultv">Save Game</button>
+                    </div>
+                    <div class="col-md-4">
+                        <button id="loadButton" type="button" class="btn btn-defaultv">Load Game</button>
+                    </div>
                 </div>
             
                 <h3 style="padding-top: 10px; padding-bottom: 10px">Highscore</h3>
