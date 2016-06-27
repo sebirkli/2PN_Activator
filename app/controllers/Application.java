@@ -5,9 +5,7 @@ package controllers;
 
 // Game
 import de.htwg.se.tpn.TwoPN;
-import de.htwg.se.tpn.controller.TpnController;
-import de.htwg.se.tpn.controller.TpnControllerInterface;
-import de.htwg.se.tpn.util.persistence.db4o.*;
+import akka.actor.ActorRef;
 import views.html.*;
 
 // Fasterxml
@@ -27,33 +25,40 @@ import play.data.DynamicForm;
 // Java
 import java.util.LinkedList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Application extends Controller {
-
-    static TpnDao dao = new TpnDao();
-    static HashMap<String, TpnControllerInterface> uuidToController = new HashMap<>();
-    static TpnControllerInterface controller = TwoPN.getInstance().getController();
+    static HashMap<String, TwoPN> uuidToGame = new HashMap<>();
     static Map<String, String> registeredUsers = new HashMap<String, String>();
+
+    TwoPN game;
+    private ActorRef webActor;
 
     @play.mvc.Security.Authenticated(Secured.class)
     public Result index() {
         return ok(index.render(this));
     }
 
+    private void initGame() {
+        if (game == null) {
+            game = new TwoPN();
+        }
+    }
+
     public Result startGUI() {
-        //TwoPN.getInstance().startGUI();
+        initGame();
+        curGame().startGUI();
         return showGame();
     }
 
     @play.mvc.Security.Authenticated(Secured.class)
     public Result ajaxGame() {
-        return ok(ajax.render(controller, this));
+        return ok(ajax.render(game.gamefield, this));
     }
 
     @play.mvc.Security.Authenticated(Secured.class)
     public Result publicGame() {
-        controller = TwoPN.getInstance().getController();
         session("private", "false");
         return showGame();
     }
@@ -65,28 +70,29 @@ public class Application extends Controller {
     }
 
     private Result showGame() {
-        TpnControllerInterface c = curController();
-        return ok(tpn.render(c, session("email")));
+        initGame();
+        TwoPN g = curGame();
+        return ok(tpn.render(g.gamefield, session("email")));
     }
 
     public Result jsonCommand(String command) {
         session("private", "true");
-        curController().processInput(command);
+        //curController().processInput(command); --------------------
         return json();
     }
     
-    public TpnControllerInterface curController() {
-        TpnControllerInterface c = controller;
+    public TwoPN curGame() {
+        TwoPN g = game;
         
         String isPrivate = session("private");
         if (isPrivate != null && isPrivate.equals("true")) {
             String uuid = curUUID();
-            if (!uuidToController.containsKey(uuid)) {
-                uuidToController.put(uuid, new TpnController(4, 2, dao));
+            if (!uuidToGame.containsKey(uuid)) {
+                uuidToGame.put(uuid, new TwoPN());
             }
-            c = uuidToController.get(uuid);
+            g = uuidToGame.get(uuid);
         }
-        return c;
+        return g;
     }
     
     private String curUUID() {
@@ -99,15 +105,15 @@ public class Application extends Controller {
     }
 
     public Result json() {
-        TpnControllerInterface c = curController();
+        TwoPN g = curGame();
         
-        int fieldSize = c.getSize();
+        int fieldSize = g.gamefield.getHeight();
         Map<String, Object> grid[][] = new HashMap[fieldSize][fieldSize];
 
         for (int i = 0; i < fieldSize; ++i) {
             for (int j = 0; j < fieldSize; ++j) {
                 grid[i][j] = new HashMap<String, Object>();
-                grid[i][j].put("value", c.getValue(i, j));
+                grid[i][j].put("value", g.gamefield.getValue(i, j));
             }
         }
         
@@ -121,12 +127,12 @@ public class Application extends Controller {
     private LinkedList<WebSocket.Out<JsonNode>> sockets;
     
     public WebSocket<JsonNode> socket() {
-        TpnControllerInterface c = curController();
+        TwoPN g = curGame();
         String name = session("nickname") == null ? "Player" : session("nickname");
         String email = session("email") == null ? "web" : session("email");
         return new WebSocket<JsonNode>() {
             public void onReady(WebSocket.In<JsonNode> in, WebSocket.Out<JsonNode> out) {
-                new WebsocketObserver(c, out, in, name, email);
+                game.actorSystem.actorOf(WebsocketObserver.props(g.controller, out, in, name, email), "wui");
             }
         };
     }

@@ -1,13 +1,13 @@
-@(controller: de.htwg.se.tpn.controller.TpnControllerInterface)
+@(gf: de.htwg.se.tpn.model.GameFieldInterface)
 
 <div id="gameContainer" class="grid game-container">
-<!--    @for(row <- 0 until controller.getSize) {
-        @for(column <- 0 until controller.getSize) {
-            <div class="tile square square-box standard-tile-size @{"tile" + controller.getValue(row, column)}">
+<!--    @for(row <- 0 until gf.getHeight) {
+        @for(column <- 0 until gf.getHeight) {
+            <div class="tile square square-box standard-tile-size @{"tile" + gf.getValue(row, column)}">
                 <div class="square-content">
                     <div>
                         <span>
-                            @controller.getValue(row, column)
+                            @gf.getValue(row, column)
                         </span>
                     </div>
                     

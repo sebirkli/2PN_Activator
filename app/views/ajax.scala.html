@@ -1,4 +1,4 @@
-@(controller: de.htwg.se.tpn.controller.TpnControllerInterface)(app: Application)
+@(gf: de.htwg.se.tpn.model.GameFieldInterface)(app: Application)
 
 @main("2PN - game") {
     <script type='text/javascript' src='@routes.Assets.versioned("javascript/ajax.js")'></script>
@@ -7,7 +7,7 @@
         </div>
     </div>
     <div class="col-md-4">
-        @gamefield(controller)
+        @gamefield(gf)
     </div>
     <div class="col-md-4">
         <div style="width: 20%">

@@ -1,4 +1,4 @@
-@(controller: de.htwg.se.tpn.controller.TpnControllerInterface)(gameId: String)
+@(gf: de.htwg.se.tpn.model.GameFieldInterface)(gameId: String)
 
 @main("2PN - game") {
 
@@ -7,7 +7,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8">
-                @gamefield(controller)
+                @gamefield(gf)
             </div>
             <div class="col-md-4">
                 <!-- Small modal -->
